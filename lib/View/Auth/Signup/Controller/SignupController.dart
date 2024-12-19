@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
+// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks, prefer_typing_uninitialized_variables
 
 import 'dart:convert';
 import 'dart:developer';
@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:gas_app/Constant/colors.dart';
 import 'package:gas_app/Constant/url.dart';
+import 'package:gas_app/Controller/ServicesProvider.dart';
 import 'package:gas_app/Model/Country.dart';
 import 'package:gas_app/Services/Failure.dart';
 import 'package:gas_app/Services/NetworkClient.dart';
@@ -18,6 +19,7 @@ import 'package:gas_app/Services/network_connection.dart';
 import 'package:gas_app/View/Auth/AuthPhone/AuthPhone.dart';
 import 'package:gas_app/View/Auth/Login/Controller/LoginController.dart';
 import 'package:gas_app/View/Auth/Login/View/Login.dart';
+import 'package:gas_app/main.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +48,7 @@ class SignupController with ChangeNotifier {
   TextEditingController confirmpasswordcontroller = TextEditingController();
   TextEditingController bankidcontroller = TextEditingController();
   TextEditingController banknamecontroller = TextEditingController();
+  TextEditingController invitecode_controller = TextEditingController();
   File? logo;
   ImagePicker picker = ImagePicker();
   static NetworkClient client = NetworkClient(http.Client());
@@ -69,16 +72,26 @@ class SignupController with ChangeNotifier {
                   ? "+966${phonecontroller.text}"
                   : "+971${phonecontroller.text}",
               "country_id": state!.id.toString(),
-              // "bank_num": bankidcontroller.text,
-              // "bank_name": banknamecontroller.text,
             },
             image: multipartFile);
         var response = await request.send();
         log(response.statusCode.toString());
-        response.stream.bytesToString().then((value) {
-          log(value.toString());
+        var res;
+        await response.stream.bytesToString().then((value) async {
+          res = await jsonDecode(value);
+          log(res.toString());
         });
+
         if (response.statusCode == 200) {
+          await ServicesProvider.savephonepoint(
+              res['data']['phone'].toString());
+          await pointSystemController.StoreUser(
+            email: emailcontroller.text,
+            name: usernamecontroller.text,
+            password: passwordcontroller.text,
+            invitecode: invitecode_controller.text,
+            phone: res['data']['phone'],
+          );
           CustomRoute.RouteReplacementTo(
             context,
             AuthPhone(),

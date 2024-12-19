@@ -35,8 +35,8 @@ class AppApi {
   static String GetMyTickets(int id) => '/get-my-ticket/$id';
   static String PostTicket(int id) => '/post-ticket/$id';
   static String SendMessage(int id) => '/send-message/$id';
-
   static String UpdateOrder(int id) => '/update-order/$id';
+  static String CancelOrder(int id) => '/user-cancel-order/$id';
   static String GetAllRegions = '/get-all-regions';
   static String GetAllCities(int id) => '/get-all-cities/$id';
   static String GetAllDistricts(int id) => '/get-all-districts/$id';
@@ -45,4 +45,10 @@ class AppApi {
   static String GetCardBanks = '/get-cards';
   static String AddCard = '/add-card';
   static String DeleteCard(int id) => '/delete-card/$id';
+
+  //////////////////////////////////////////////////
+
+  static String StorePoint = '/store-points';
+  static String StoreUser = '/store-user';
+  static String GetUserCode = '/get-user-code';
 }

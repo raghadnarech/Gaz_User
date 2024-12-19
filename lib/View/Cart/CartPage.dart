@@ -924,6 +924,8 @@ class CartPage extends StatelessWidget {
                                                     Expanded(
                                                       child: GestureDetector(
                                                         onTap: () async {
+                                                          CustomRoute.RoutePop(
+                                                              context);
                                                           cartController
                                                               .getCurrentlocation();
                                                           CustomRoute.RouteTo(

@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:gas_app/Services/CustomDialog.dart';
 import 'package:gas_app/View/Destination/TrackOrder.dart';
 import 'package:gas_app/main.dart';
 import 'package:geolocator/geolocator.dart';
@@ -29,7 +30,7 @@ import 'package:permission_handler/permission_handler.dart';
 class CartController with ChangeNotifier {
   List<CartProduct> listcartproduct = [];
   Cart cart = Cart(listcartproduct: []);
-  Address address = Address();
+  Address? address;
   Services? services;
   SubSupplier? supplier;
   TextEditingController time = TextEditingController();
@@ -139,6 +140,7 @@ class CartController with ChangeNotifier {
   bool selectaddress = false;
   bool selectlocation = false;
   checkmylocation() {
+    address = null;
     mylocation = true;
     selectaddress = false;
     selectlocation = false;
@@ -155,6 +157,7 @@ class CartController with ChangeNotifier {
   }
 
   checkselectlocation() {
+    address = null;
     mylocation = false;
     selectaddress = false;
     selectlocation = true;
@@ -265,8 +268,8 @@ class CartController with ChangeNotifier {
 
   void selectAddress(Address newAddress) {
     address = newAddress;
-    lat = address.lat;
-    long = address.lang;
+    lat = address!.lat;
+    long = address!.lang;
     Gcontrollers!.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
       target: LatLng(lat!, long!),
       zoom: 14.4746,
@@ -294,7 +297,7 @@ class CartController with ChangeNotifier {
     cart.toDoor = toDoor;
     cart.toHouse = toHouse;
     cart.isDiscount = isDiscount;
-    cart.address_id = address.id;
+    cart.address_id = address!.id;
     cart.date_wanted = date_wanted;
     cart.haselevater = haselevater;
     cart.selectfloor = selectfloor;
@@ -311,10 +314,12 @@ class CartController with ChangeNotifier {
     cart.toDoor = toDoor;
     cart.toHouse = toHouse;
     cart.isDiscount = isDiscount;
-    cart.address_id = address.id;
+    cart.address_id = address!.id;
     cart.date_wanted = date_wanted;
     cart.haselevater = haselevater;
     cart.selectfloor = selectfloor;
+    cart.lat = lat;
+    cart.long = long;
 
     Map<String, dynamic> requestBody = cart.toJson();
 
@@ -339,6 +344,8 @@ class CartController with ChangeNotifier {
           log(response.statusCode.toString());
           EasyLoading.dismiss();
           int id = jsonDecode(response.body)['order']['id'];
+          await pointSystemController.StorePoint(
+              ServicesProvider.getphone(), 'UserOrder');
           CustomRoute.RouteReplacementTo(
               context,
               TrackOrder(
@@ -346,6 +353,11 @@ class CartController with ChangeNotifier {
               ));
           EmptyCart();
           return Right(true);
+        } else if (response.statusCode == 400) {
+          EasyLoading.dismiss();
+          CustomDialog.Dialog(context,
+              title: "لم يتم تخصيص طريقة الطلب توجه الى تخصيص الخيارات");
+          return Left(ResultFailure(''));
         } else if (response.statusCode == 404) {
           EasyLoading.dismiss();
 

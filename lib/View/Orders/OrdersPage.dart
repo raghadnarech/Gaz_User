@@ -1,6 +1,7 @@
 // ignore_for_file: library_prefixes
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:gap/gap.dart';
@@ -10,6 +11,7 @@ import 'package:gas_app/Services/Routes.dart';
 import 'package:gas_app/View/HomePage/Controller/HomePageController.dart';
 import 'package:gas_app/View/Objection/Controller/ObjectionController.dart';
 import 'package:gas_app/View/Objection/ObjectionPage.dart';
+import 'package:gas_app/View/Orders/Controller/OrderDetailsController.dart';
 import 'package:gas_app/View/Orders/OrederCartDetails.dart';
 import 'package:gas_app/View/Rate/Controller/RateController.dart';
 import 'package:gas_app/View/Rate/RatePage.dart';
@@ -266,12 +268,19 @@ class _OrdersState extends State<Orders> {
                                         onTap: () {
                                           CustomRoute.RouteTo(
                                               context,
-                                              OrederCartDetails(
-                                                invoices: controller
-                                                    .listorder[index].invoices!,
-                                                orderes:
-                                                    controller.listorder[index],
-                                                controller: controller,
+                                              ChangeNotifierProvider(
+                                                create: (context) =>
+                                                    OrderDetailsController()
+                                                      ..GetOrderById(controller
+                                                          .listorder[index]
+                                                          .id!),
+                                                builder: (context, child) =>
+                                                    OrederCartDetails(
+                                                  controller: controller,
+                                                ),
+                                                child: OrederCartDetails(
+                                                  controller: controller,
+                                                ),
                                               ));
                                         },
                                         child: Container(
@@ -615,10 +624,6 @@ class _CancelOrderState extends State<CancelOrder> {
                                           CustomRoute.RouteTo(
                                               context,
                                               OrederCartDetails(
-                                                invoices: controller
-                                                    .listorder[index].invoices!,
-                                                orderes:
-                                                    controller.listorder[index],
                                                 controller: controller,
                                               ));
                                         },
@@ -963,10 +968,6 @@ class _PreviosOrdersState extends State<PreviosOrders> {
                                           CustomRoute.RouteTo(
                                               context,
                                               OrederCartDetails(
-                                                invoices: controller
-                                                    .listorder[index].invoices!,
-                                                orderes:
-                                                    controller.listorder[index],
                                                 controller: controller,
                                               ));
                                         },

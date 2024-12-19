@@ -1,5 +1,6 @@
 import 'package:gas_app/Controller/CartController.dart';
 import 'package:gas_app/Controller/LanguageProvider.dart';
+import 'package:gas_app/Controller/PointSystemController.dart';
 import 'package:gas_app/View/Destination/Controller/TrackOrderController.dart';
 import 'package:gas_app/View/HomePage/Controller/HomePageController.dart';
 
@@ -23,5 +24,8 @@ List<SingleChildWidget> listproviders = [
   ),
   ChangeNotifierProvider<TrackOrderController>(
     create: (context) => TrackOrderController(),
+  ),
+  ChangeNotifierProvider<PointSystemController>(
+    create: (context) => PointSystemController(),
   )
 ];

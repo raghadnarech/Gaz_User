@@ -208,20 +208,20 @@ class Signup extends StatelessWidget {
                         color: kPrimaryColor,
                         size: 20,
                       )),
-                  // Gap(10),
-                  // Text(
-                  //   "رقم الحساب البنكي",
-                  //   style: style15semibold,
-                  // ),
-                  // Gap(10),
-                  // TextInputCustom(
-                  //     controller: controller.bankidcontroller,
-                  //     type: TextInputType.text,
-                  //     icon: Icon(
-                  //       Icons.account_balance_wallet_rounded,
-                  //       color: kPrimaryColor,
-                  //       size: 20,
-                  //     )),
+                  Gap(10),
+                  Text(
+                    "رمز الدعوة",
+                    style: style15semibold,
+                  ),
+                  Gap(10),
+                  TextInputCustom(
+                      controller: controller.invitecode_controller,
+                      type: TextInputType.text,
+                      icon: Icon(
+                        Icons.text_fields,
+                        color: kPrimaryColor,
+                        size: 20,
+                      )),
                   // Gap(10),
                   // Text(
                   //   "اسم البنك",

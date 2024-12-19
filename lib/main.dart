@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gas_app/Constant/colors.dart';
 import 'package:gas_app/Controller/CartController.dart';
 import 'package:gas_app/Controller/ListProvider.dart';
+import 'package:gas_app/Controller/PointSystemController.dart';
 import 'package:gas_app/View/Destination/Controller/TrackOrderController.dart';
 import 'package:gas_app/View/HomePage/Controller/HomePageController.dart';
 import 'package:gas_app/View/Splash/Controller/SplashController.dart';
@@ -24,6 +25,7 @@ void main() {
 HomePageController homePageController = HomePageController();
 CartController cartController = CartController();
 TrackOrderController trackOrderController = TrackOrderController();
+PointSystemController pointSystemController = PointSystemController();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

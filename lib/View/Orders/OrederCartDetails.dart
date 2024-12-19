@@ -6,22 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:gas_app/Constant/colors.dart';
 import 'package:gas_app/Constant/styles.dart';
-import 'package:gas_app/Model/Order.dart';
 import 'package:gas_app/Services/Responsive.dart';
 import 'package:gas_app/Services/Routes.dart';
 import 'package:gas_app/View/Destination/TrackOrder.dart';
 import 'package:gas_app/View/HomePage/Controller/HomePageController.dart';
+import 'package:gas_app/View/Orders/Controller/OrderDetailsController.dart';
 import 'package:gas_app/main.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class OrederCartDetails extends StatefulWidget {
-  OrederCartDetails(
-      {required this.invoices,
-      required this.orderes,
-      required this.controller});
+  OrederCartDetails({required this.controller});
   HomePageController controller;
-  Orderes orderes;
-  List<Invoices> invoices;
 
   @override
   State<OrederCartDetails> createState() => _OrederCartDetailsState();
@@ -30,264 +26,209 @@ class OrederCartDetails extends StatefulWidget {
 class _OrederCartDetailsState extends State<OrederCartDetails> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [],
-        backgroundColor: Color(0xff445461),
-        centerTitle: true,
-        title: Text(
-          "تفاصيل الطلب",
-          style: style15semibold,
+    return Consumer<OrderDetailsController>(
+      builder: (context, controller, child) => Scaffold(
+        appBar: AppBar(
+          actions: [],
+          backgroundColor: Color(0xff445461),
+          centerTitle: true,
+          title: Text(
+            "تفاصيل الطلب",
+            style: style15semibold,
+          ),
         ),
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(8),
-        shrinkWrap: true,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    "رقم الفاتورة",
-                    style: style18semibold,
-                  ),
-                  Gap(5),
-                  Text(
-                    "${widget.orderes.number}",
-                    style: style15semibold,
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Gap(20),
-          widget.invoices.isEmpty
-              ? Container()
-              : SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    columns: [
-                      DataColumn(
-                        label: Text(
-                          "المنتج",
-                          style: style18semibold,
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "القيمة",
-                          style: style18semibold,
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "الكمية",
-                          style: style18semibold,
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "الاجمالي",
-                          style: style18semibold,
-                        ),
-                      )
-                    ],
-                    rows: widget.invoices
-                        .expand((invoice) =>
-                            invoice.products!.map((product) => DataRow(
-                                  cells: [
-                                    DataCell(
-                                      Text(
-                                        "${product.name}",
-                                        style: style15semibold,
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        "${product.price} ريال",
-                                        style: style15semibold,
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        "${product.quantity}",
-                                        style: style15semibold,
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        "${product.price * product.quantity} ريال",
-                                        style: style15semibold,
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                  ],
-                                )))
-                        .toList(),
-                  ),
+        body: ListView(
+          padding: const EdgeInsets.all(8),
+          shrinkWrap: true,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "رقم الفاتورة",
+                      style: style18semibold,
+                    ),
+                    const Gap(5),
+                    Text(
+                      controller.order.order!.number ?? '',
+                      style: style15semibold,
+                    ),
+                  ],
                 ),
-          Gap(20),
-          Divider(
-            endIndent: 50,
-            indent: 50,
-            color: kPrimaryColor,
-          ),
-          Gap(20),
-          Row(
-            children: [
-              Text(
-                "عنوان التوصيل",
-                style: style18semibold,
-              ),
-              Gap(10),
-              Row(
-                children: [
-                  Icon(Icons.location_on),
-                  // Text(
-                  //   "${widget.controller.addressList.where((element) => element.id == widget.orderes.addressId).first.name}",
-                  //   style: style15semibold,
-                  // ),
-                ],
-              ),
-            ],
-          ),
-          Gap(10),
-          Row(
-            children: [
-              Text(
-                "تاريخ الطلب",
-                style: style18semibold,
-              ),
-              Gap(10),
-              Text(
-                "${DateFormat('yyyy/MM/dd').format(DateTime.parse(widget.orderes.createdAt.toString()))}",
-                style: style15semibold,
-              ),
-            ],
-          ),
-          Gap(10),
-          Row(
-            children: [
-              Text(
-                "السعر الصافي",
-                style: style18semibold,
-              ),
-              Gap(10),
-              Text(
-                "${widget.orderes.total}",
-                style: style15semibold,
-              ),
-            ],
-          ),
-          Gap(10),
-          Row(
-            children: [
-              Text(
-                "السعر بعد الرمز الترويجي",
-                style: style18semibold,
-              ),
-              Gap(10),
-              Text(
-                "${widget.orderes.total}",
-                style: style15semibold,
-              ),
-            ],
-          ),
-          widget.orderes.toDoor == '1'
-              ? Column(
-                  children: [
-                    Gap(10),
-                    Row(
-                      children: [
-                        Text(
-                          "رسوم التوصيل",
-                          style: style18semibold,
+              ],
+            ),
+            const Gap(20),
+            controller.order.order!.invoices!.isEmpty
+                ? Container()
+                : SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columns: [
+                        DataColumn(
+                          label: Text(
+                            "المنتج",
+                            style: style18semibold,
+                          ),
                         ),
-                        Gap(10),
-                        Text(
-                          "${cartController.fees.delivaryFees}",
-                          style: style15semibold,
+                        DataColumn(
+                          label: Text(
+                            "القيمة",
+                            style: style18semibold,
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            "الكمية",
+                            style: style18semibold,
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'الإجمالي',
+                            style: style18semibold,
+                          ),
                         ),
                       ],
+                      rows: controller.order.order!.invoices!
+                          .expand((invoice) =>
+                              invoice.products!.map((product) => DataRow(
+                                    cells: [
+                                      DataCell(
+                                        Text(
+                                          "${product.name}",
+                                          style: style15semibold,
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          "${product.price} ريال",
+                                          style: style15semibold,
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          "${product.quantity}",
+                                          style: style15semibold,
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          "${product.price * product.quantity} ريال",
+                                          style: style15semibold,
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  )))
+                          .toList(),
                     ),
-                  ],
-                )
-              : Container(),
-          widget.orderes.toHouse == '1'
-              ? Column(
+                  ),
+            const Gap(20),
+            const Divider(endIndent: 50, indent: 50, color: kPrimaryColor),
+            const Gap(20),
+            Row(
+              children: [
+                Text(
+                  "عنوان التوصيل",
+                  style: style18semibold,
+                ),
+                const Gap(10),
+                Row(
                   children: [
-                    Gap(10),
-                    Row(
-                      children: [
-                        Text(
-                          "رسوم توصيل الأدوار العليا",
-                          style: style18semibold,
-                        ),
-                        Gap(10),
-                      ],
+                    const Icon(Icons.location_on),
+                    Text(
+                      widget.controller.addressList
+                              .firstWhere((e) =>
+                                  e.id == controller.order.order!.addressId)
+                              .name ??
+                          "غير محدد",
+                      style: style15semibold,
                     ),
                   ],
-                )
-              : Container(),
-          widget.orderes.isOnTime == '1'
-              ? Column(
-                  children: [
-                    Gap(10),
-                    Row(
-                      children: [
-                        Text(
-                          "رسوم توصيل خارج أوقات الدوام",
-                          style: style15semibold,
-                        ),
-                        Gap(10),
-                        Text(
-                          "${cartController.fees.outTimeFees}",
-                          style: style15semibold,
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              : Container(),
-          Gap(10),
-          Divider(
-            endIndent: 50,
-            indent: 50,
-            thickness: 2,
-            color: kFourthColor,
-          ),
-          Gap(10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "المجموع الكلي مع الرسوم",
-                style: style18semibold,
-              ),
-              Gap(10),
-              Text(
-                "${widget.orderes.totalWithFees} ريال",
-                style: style15semibold,
-              ),
-            ],
-          ),
-          Gap(50),
-          widget.orderes.status == 'pending'
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: GestureDetector(
+                ),
+              ],
+            ),
+            const Gap(10),
+            Row(
+              children: [
+                Text(
+                  "تاريخ الطلب",
+                  style: style18semibold,
+                ),
+                const Gap(10),
+                Text(
+                  DateFormat('yyyy/MM/dd').format(
+                    DateTime.parse(controller.order.order!.createdAt ?? ''),
+                  ),
+                  style: style15semibold,
+                ),
+              ],
+            ),
+            const Gap(10),
+            Row(
+              children: [
+                Text(
+                  "السعر الصافي",
+                  style: style18semibold,
+                ),
+                const Gap(10),
+                Text(
+                  '${controller.order.order!.total ?? 0} ريال',
+                  style: style15semibold,
+                ),
+              ],
+            ),
+            const Gap(10),
+            controller.order.order!.toDoor == '1'
+                ? Row(
+                    children: [
+                      Text(
+                        "رسوم التوصيل",
+                        style: style18semibold,
+                      ),
+                      const Gap(10),
+                      Text(
+                        '${cartController.fees.delivaryFees ?? 0} ريال',
+                        style: style15semibold,
+                      ),
+                    ],
+                  )
+                : Container(),
+            const Divider(
+                endIndent: 50, indent: 50, thickness: 2, color: kFourthColor),
+            const Gap(10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "السعر مع الرسوم",
+                  style: style18semibold,
+                ),
+                const Gap(10),
+                Text(
+                  '${controller.order.order!.totalWithFees ?? 0} ريال',
+                  style: style15semibold,
+                ),
+              ],
+            ),
+            const Gap(50),
+            controller.order.order!.status == 'pending'
+                ? GestureDetector(
                     onTap: () {
-                      log(widget.orderes.id.toString());
+                      log(controller.order.order!.id.toString());
+                      homePageController.markers = {};
+
                       CustomRoute.RouteTo(
-                          context,
-                          TrackOrder(
-                            id: widget.orderes.id,
-                          ));
+                        context,
+                        TrackOrder(
+                          id: controller.order.order!.id,
+                        ),
+                      );
                     },
                     child: Container(
                       height: 43,
@@ -295,17 +236,18 @@ class _OrederCartDetailsState extends State<OrederCartDetails> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                              offset: Offset(0, 2),
-                              color: kBaseThirdyColor.withAlpha(75),
-                              blurRadius: 7)
+                            offset: const Offset(0, 2),
+                            color: kBaseThirdyColor.withAlpha(75),
+                            blurRadius: 7,
+                          )
                         ],
-                        color: Color(0xff445461),
+                        color: const Color(0xff445461),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(
                         child: Text(
                           "تتبع الطلب",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 15,
                             color: kBaseColor,
                             fontWeight: FontWeight.bold,
@@ -313,37 +255,10 @@ class _OrederCartDetailsState extends State<OrederCartDetails> {
                         ),
                       ),
                     ),
-                  ),
-                )
-              : Container(),
-
-          //
-          Gap(10),
-          // Gap(20),
-          // if (!isExpired)
-          //   Row(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: [
-          //       TimerCountdown(
-          //         enableDescriptions: false,
-          //         timeTextStyle: TextStyle(locale: Locale('ar')),
-          //         format: CountDownTimerFormat.minutesSeconds,
-          //         endTime: DateTime.now()
-          //             .add(Duration(seconds: 100) - difference!),
-          //         onEnd: () {
-          //           setState(() {
-          //             isExpired = false;
-          //           });
-          //           // يمكن إضافة منطق لتعطيل الزر هنا بعد انتهاء العداد
-          //         },
-          //       ),
-          //     ],
-          //   ),
-          // if (!isExpired) Gap(20),
-          // widget.orderes.status != '6'
-          //     ?
-          //     : Container()
-        ],
+                  )
+                : Container(),
+          ],
+        ),
       ),
     );
   }

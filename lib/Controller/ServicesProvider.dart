@@ -26,11 +26,23 @@ class ServicesProvider with ChangeNotifier {
     return sharedPreferences!.getString('token') ?? "";
   }
 
+  static String getphone() {
+    Future.delayed(Duration.zero).then((value) async {
+      sharedPreferences = await SharedPreferences.getInstance();
+    });
+    return sharedPreferences!.getString('phonepoint') ?? "";
+  }
+
   static Future<void> saveuser(User user) async {
     sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences!.setString('token', user.token!);
     sharedPreferences!.setBool('role', user.role!);
     sharedPreferences!.setBool('isLoggin', true);
+  }
+
+  static Future<void> savephonepoint(String phone) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences!.setString('phonepoint', phone);
   }
 
   static Future<void> logout(BuildContext context) async {
@@ -87,9 +99,7 @@ class ServicesProvider with ChangeNotifier {
     if (response.statusCode == 200) {
       Map data = jsonDecode(response.body);
       formattedAddress = data["results"][0]["formatted_address"];
-      sharedPreferences!.setString("location_text", formattedAddress!);
-      sharedPreferences!.setDouble("lat", latitude);
-      sharedPreferences!.setDouble("longt", longitude);
+
       return formattedAddress;
     }
   }

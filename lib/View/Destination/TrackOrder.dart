@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:gas_app/Constant/colors.dart';
 import 'package:gas_app/Constant/styles.dart';
 import 'package:gas_app/Services/Responsive.dart';
+import 'package:gas_app/Services/Routes.dart';
 import 'package:gas_app/main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -21,14 +22,8 @@ class TrackOrder extends StatefulWidget {
 class _TrackOrderState extends State<TrackOrder> {
   @override
   void initState() {
-    trackOrderController.initState(widget.id!, context);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    trackOrderController.diposestate();
-    super.dispose();
+    trackOrderController.initState(widget.id!, context);
   }
 
   @override
@@ -71,8 +66,8 @@ class _TrackOrderState extends State<TrackOrder> {
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: GestureDetector(
                   onTap: () async {
-                    // await orderController.ReciveOrderAsUser(
-                    //     context, widget);
+                    await trackOrderController.DialogDeleteOrUpdateOrder(
+                        context);
                   },
                   child: Container(
                     height: 43,
@@ -105,6 +100,12 @@ class _TrackOrderState extends State<TrackOrder> {
       ),
       appBar: AppBar(
         actions: [],
+        leading: IconButton(
+            onPressed: () {
+              trackOrderController.disposeProvider();
+              CustomRoute.RoutePop(context);
+            },
+            icon: Icon(Icons.arrow_back)),
         backgroundColor: Color(0xff445461),
         centerTitle: true,
         title: Text(

@@ -9,7 +9,8 @@ class Cart {
   int? address_id;
   int? haselevater = 1;
   int? selectfloor = 0;
-  // String? code;
+  double? lat;
+  double? long;
   List<CartProduct> listcartproduct;
   Cart({required this.listcartproduct});
   double getTotalPrice() {
@@ -28,6 +29,8 @@ class Cart {
       "date_wanted": date_wanted,
       "isDiscount": isDiscount! ? "1" : "0",
       "address_id": address_id,
+      'lat': lat,
+      'long': long,
       "floor": selectfloor.toString(),
       "isElevetor": haselevater.toString(),
       'product':

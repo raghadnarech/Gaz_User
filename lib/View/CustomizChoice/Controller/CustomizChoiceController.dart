@@ -1,9 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_app/Constant/url.dart';
 import 'package:gas_app/Model/SubSupplier.dart';
+import 'package:gas_app/Services/CustomDialog.dart';
 import 'package:gas_app/Services/Failure.dart';
 import 'package:gas_app/Services/NetworkClient.dart';
 import 'package:gas_app/Services/network_connection.dart';
@@ -95,6 +98,7 @@ class CustomizChoiceController with ChangeNotifier {
         log(response.body);
         log(response.statusCode.toString());
         if (response.statusCode == 200) {
+          CustomDialog.Dialog(context, title: "تم تخصيص الخيار بنجاح");
           notifyListeners();
           return Right(true);
         } else if (response.statusCode == 404) {

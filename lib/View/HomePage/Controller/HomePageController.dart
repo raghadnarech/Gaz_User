@@ -126,8 +126,10 @@ class HomePageController with ChangeNotifier {
   }
 
   void changemarkers(dynamic event) async {
-    if (event != null && event.data != null) {
       final data = jsonDecode(event.data);
+
+    if (data['mandob_id']!=null) {
+      if (event != null && event.data != null) {
       final int mandobId = data['mandob_id'];
       final double latitude = double.parse(data['latitude']);
       final double longitude = double.parse(data['longitude']);
@@ -154,6 +156,7 @@ class HomePageController with ChangeNotifier {
       );
 
       notifyListeners();
+    }
     }
   }
 
@@ -293,6 +296,7 @@ class HomePageController with ChangeNotifier {
 
   Future<Either<Failure, bool>> getalladdress() async {
     isloadingaddress = true;
+    addressList.clear();
     notifyListeners();
     try {
       final connected = await NetworkConnection.isConnected();

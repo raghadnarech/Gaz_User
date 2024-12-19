@@ -19,6 +19,7 @@ import 'package:gas_app/View/GetInfo/AboutUs.dart';
 import 'package:gas_app/View/GetInfo/Controller/GetInfoController.dart';
 import 'package:gas_app/View/GetInfo/PrivacyPolicy.dart';
 import 'package:gas_app/View/HomePage/Controller/HomePageController.dart';
+import 'package:gas_app/View/Point/PointPage.dart';
 import 'package:gas_app/View/Wallet/Wallet.dart';
 // import 'package:gas_app/View/Noificition/Controller/NotificationController.dart';
 // import 'package:gas_app/View/Noificition/Notification.dart';
@@ -114,17 +115,12 @@ class CustomDrawer extends StatelessWidget {
               // Gap(20),
               // CustomSectionDrawer(
               //     assetsvg: 'assets/svg/profile.svg', titile: "الصفحة الشخصية"),
-              // Gap(20),
-              // CustomSectionDrawer(
-              //   assetsvg: 'assets/svg/noti.svg',
-              //   titile: "الإشعارات",
-              //   nextpage: ChangeNotifierProvider<NotificationController>(
-              //     create: (context) =>
-              //         NotificationController()..GetNotification(),
-              //     lazy: true,
-              //     builder: (context, child) => NotificationPage(),
-              //   ),
-              // ),
+              Gap(20),
+              CustomSectionDrawer(
+                assetsvg: 'assets/svg/noti.svg',
+                titile: "نقاطي",
+                nextpage: PointPage(),
+              ),
               Gap(20),
               CustomSectionDrawer(
                 assetsvg: 'assets/svg/about_us.svg',
